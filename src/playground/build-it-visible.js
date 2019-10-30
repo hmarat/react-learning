@@ -1,26 +1,34 @@
-const app = {
-     title: "Toggle app",
-     isOpened: false,
-     subtitle: "This is app working with Toggle"
+class App extends React.Component {
+    constructor(props) {
+        super(props);
+        this.visibilityToggleHandler = this.visibilityToggleHandler.bind(this)
+        this.state = {
+            visibility: false
+        }
+    }
+
+    visibilityToggleHandler() {
+        this.setState(prevState => ({
+            visibility: !prevState.visibility
+        }))
+    }
+
+    render() {
+        const content = (
+            <div>
+                <h2>This app solves many problems</h2>
+                <p>Its beautiful</p>
+            </div>
+        )
+
+        return (
+            <div>
+                <h1>Built it visible App</h1>
+                <button onClick={this.visibilityToggleHandler}>{this.state.visibility ? "Hide" : "Show"}</button>
+                {this.state.visibility && content}
+            </div>
+        )
+    }
 }
 
-const toggleHandler = () =>{
-    app.isOpened = !app.isOpened;
-    renderApp()
-}
-
-const renderApp = () =>{
-    const template = (
-        <div>
-        <h1>{app.title}</h1>
-        <button onClick={toggleHandler}>{app.isOpened ? "Close" : "Open"}</button>
-        {app.isOpened && (
-            <p>{app.subtitle}</p>
-        )}
-    </div>
-    )
-    
-    ReactDOM.render(template, document.getElementById("app"));
-}
-
-renderApp()
+ReactDOM.render(<App />, document.getElementById("app"))

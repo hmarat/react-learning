@@ -11,15 +11,21 @@ class Counter extends React.Component {
     }
 
     addOneHandler() {
-        this.setState({ count: this.state.count + 1 })
+        this.setState(prevState => ({
+            count: prevState.count + 1
+        }))
     }
 
     minusOneHandler() {
-        this.setState({ count: this.state.count - 1 })
+        this.setState(prevState => ({
+            count: prevState.count - 1
+        }))
     }
 
     resetHandler() {
-        this.setState({ count: 0 })
+        this.setState(() => ({
+            count: 0
+        }))
     }
 
     render() {
@@ -35,35 +41,3 @@ class Counter extends React.Component {
 }
 
 ReactDOM.render(<Counter />, document.getElementById("app"));
-
-// let count = 0;
-
-// const addOne = () => {
-//     count++;
-//     renderCountingApp()
-// }
-
-// const minusOne = () => {
-//     count--;
-//     renderCountingApp()
-// }
-
-// const reset = () => {
-//     count = 0;
-//     renderCountingApp()
-// }
-
-// const renderCountingApp = () => {
-//     const templateTwo = (
-//         <div>
-//             <h1>Count: {count}</h1>
-//             <button onClick={addOne}>+1</button>
-//             <button onClick={minusOne}>-1</button>
-//             <button onClick={reset}>Reset</button>
-//         </div>
-//     )
-
-//     ReactDOM.render(templateTwo, rootApp);
-// }
-
-// renderCountingApp()
