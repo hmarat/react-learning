@@ -4,9 +4,18 @@ class IndesicionApp extends React.Component {
         this.removeOptionsHandler = this.removeOptionsHandler.bind(this);
         this.pickActionHandler = this.pickActionHandler.bind(this);
         this.addOptionHandler = this.addOptionHandler.bind(this);
+        this.removeOptionHandler = this.removeOptionHandler.bind(this);
         this.state = {
-            options: []
+            options: this.props.options
         }
+    }
+
+    componentDidMount() {
+        console.log("ComponentDidMount")
+    }
+
+    componentDidUpdate() {
+        console.log("ComponentDidUpdate");
     }
 
     pickActionHandler() {
@@ -20,8 +29,12 @@ class IndesicionApp extends React.Component {
         }))
     }
 
+    removeOptionHandler(optionToRemove) {
+        this.setState(prevState => ({ options: prevState.options.filter(option => option !== optionToRemove) }))
+    }
+
     addOptionHandler(option) {
-        if (!option) {
+        if (!option.trim()) {
             return "Enter a valid option"
         }
         else if (this.state.options.indexOf(option) > -1) {
@@ -47,6 +60,7 @@ class IndesicionApp extends React.Component {
                 <Options
                     options={this.state.options}
                     removeOptionsHandler={this.removeOptionsHandler}
+                    removeOptionHandler={this.removeOptionHandler}
                 />
                 <AddOption
                     addOptionHandler={this.addOptionHandler}
@@ -54,6 +68,10 @@ class IndesicionApp extends React.Component {
             </div>
         )
     }
+}
+
+IndesicionApp.defaultProps = {
+    options: []
 }
 
 const Header = props => {
@@ -82,7 +100,15 @@ const Options = props => {
     return (
         <div>
             <button onClick={props.removeOptionsHandler}>Remove all</button>
-            {props.options.map((option, index) => <Option key={index} optionText={option} />)}
+            {
+                props.options.map((option, index) => (
+                    <Option
+                        key={index}
+                        optionText={option}
+                        removeOptionHandler={props.removeOptionHandler}
+                    />
+                ))
+            }
         </div>
     )
 }
@@ -91,6 +117,9 @@ const Option = props => {
     return (
         <div>
             Option: {props.optionText}
+            <button onClick={() => props.removeOptionHandler(props.optionText)}>
+                Remove
+            </button>
         </div>
     )
 }
@@ -131,4 +160,4 @@ class AddOption extends React.Component {
 
 }
 
-ReactDOM.render(<IndesicionApp />, document.getElementById("app"));
+ReactDOM.render(<IndesicionApp />, document.getElementById("app")); 

@@ -21,13 +21,24 @@ var IndesicionApp = function (_React$Component) {
         _this.removeOptionsHandler = _this.removeOptionsHandler.bind(_this);
         _this.pickActionHandler = _this.pickActionHandler.bind(_this);
         _this.addOptionHandler = _this.addOptionHandler.bind(_this);
+        _this.removeOptionHandler = _this.removeOptionHandler.bind(_this);
         _this.state = {
-            options: []
+            options: _this.props.options
         };
         return _this;
     }
 
     _createClass(IndesicionApp, [{
+        key: "componentDidMount",
+        value: function componentDidMount() {
+            console.log("ComponentDidMount");
+        }
+    }, {
+        key: "componentDidUpdate",
+        value: function componentDidUpdate() {
+            console.log("ComponentDidUpdate");
+        }
+    }, {
         key: "pickActionHandler",
         value: function pickActionHandler() {
             var option = this.state.options[Math.floor(Math.random() * this.state.options.length)];
@@ -43,9 +54,18 @@ var IndesicionApp = function (_React$Component) {
             });
         }
     }, {
+        key: "removeOptionHandler",
+        value: function removeOptionHandler(optionToRemove) {
+            this.setState(function (prevState) {
+                return { options: prevState.options.filter(function (option) {
+                        return option !== optionToRemove;
+                    }) };
+            });
+        }
+    }, {
         key: "addOptionHandler",
         value: function addOptionHandler(option) {
-            if (!option) {
+            if (!option.trim()) {
                 return "Enter a valid option";
             } else if (this.state.options.indexOf(option) > -1) {
                 return "Option already exists";
@@ -73,7 +93,8 @@ var IndesicionApp = function (_React$Component) {
                 }),
                 React.createElement(Options, {
                     options: this.state.options,
-                    removeOptionsHandler: this.removeOptionsHandler
+                    removeOptionsHandler: this.removeOptionsHandler,
+                    removeOptionHandler: this.removeOptionHandler
                 }),
                 React.createElement(AddOption, {
                     addOptionHandler: this.addOptionHandler
@@ -84,6 +105,10 @@ var IndesicionApp = function (_React$Component) {
 
     return IndesicionApp;
 }(React.Component);
+
+IndesicionApp.defaultProps = {
+    options: []
+};
 
 var Header = function Header(props) {
     return React.createElement(
@@ -127,7 +152,11 @@ var Options = function Options(props) {
             "Remove all"
         ),
         props.options.map(function (option, index) {
-            return React.createElement(Option, { key: index, optionText: option });
+            return React.createElement(Option, {
+                key: index,
+                optionText: option,
+                removeOptionHandler: props.removeOptionHandler
+            });
         })
     );
 };
@@ -137,7 +166,14 @@ var Option = function Option(props) {
         "div",
         null,
         "Option: ",
-        props.optionText
+        props.optionText,
+        React.createElement(
+            "button",
+            { onClick: function onClick() {
+                    return props.removeOptionHandler(props.optionText);
+                } },
+            "Remove"
+        )
     );
 };
 
