@@ -23,7 +23,7 @@ var IndesicionApp = function (_React$Component) {
         _this.addOptionHandler = _this.addOptionHandler.bind(_this);
         _this.removeOptionHandler = _this.removeOptionHandler.bind(_this);
         _this.state = {
-            options: _this.props.options
+            options: []
         };
         return _this;
     }
@@ -31,12 +31,24 @@ var IndesicionApp = function (_React$Component) {
     _createClass(IndesicionApp, [{
         key: "componentDidMount",
         value: function componentDidMount() {
-            console.log("ComponentDidMount");
+            try {
+                var json = localStorage.getItem("options");
+                var options = JSON.parse(json);
+
+                if (options) {
+                    this.setState(function () {
+                        return { options: options };
+                    });
+                }
+            } catch (e) {}
         }
     }, {
         key: "componentDidUpdate",
-        value: function componentDidUpdate() {
-            console.log("ComponentDidUpdate");
+        value: function componentDidUpdate(prevProps, prevState) {
+            if (prevState.options.length !== this.state.options.length) {
+                var json = JSON.stringify(this.state.options);
+                localStorage.setItem("options", json);
+            }
         }
     }, {
         key: "pickActionHandler",
@@ -106,10 +118,6 @@ var IndesicionApp = function (_React$Component) {
     return IndesicionApp;
 }(React.Component);
 
-IndesicionApp.defaultProps = {
-    options: []
-};
-
 var Header = function Header(props) {
     return React.createElement(
         "div",
@@ -150,6 +158,11 @@ var Options = function Options(props) {
             "button",
             { onClick: props.removeOptionsHandler },
             "Remove all"
+        ),
+        props.options.length === 0 && React.createElement(
+            "p",
+            null,
+            "Please add an option to get started!"
         ),
         props.options.map(function (option, index) {
             return React.createElement(Option, {
@@ -199,13 +212,13 @@ var AddOption = function (_React$Component2) {
 
             var option = e.target.elements["option"].value;
             var error = this.props.addOptionHandler(option);
+
             if (!error) {
                 e.target.elements["option"].value = "";
             }
+
             this.setState(function () {
-                return {
-                    error: error
-                };
+                return { error: error };
             });
         }
     }, {
