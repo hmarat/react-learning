@@ -73,14 +73,17 @@ export default class IndesicionApp extends React.Component {
                         pickActionHandler={this.pickActionHandler}
                         hasOptions={this.state.options.length > 0}
                     />
-                    <Options
-                        options={this.state.options}
-                        removeOptionsHandler={this.removeOptionsHandler}
-                        removeOptionHandler={this.removeOptionHandler}
-                    />
-                    <AddOption
-                        addOptionHandler={this.addOptionHandler}
-                    />
+                    <div className="widget">
+                        <Options
+                            options={this.state.options}
+                            removeOptionsHandler={this.removeOptionsHandler}
+                            removeOptionHandler={this.removeOptionHandler}
+                        />
+                        <AddOption
+                            addOptionHandler={this.addOptionHandler}
+                        />
+                    </div>
+
                     <OptionModal
                         selectedOption={this.state.selectedOption}
                         actionCloseHandler={this.actionCloseHandler}
