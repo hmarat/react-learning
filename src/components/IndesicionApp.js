@@ -68,23 +68,26 @@ export default class IndesicionApp extends React.Component {
         return (
             <div>
                 <Header title={title} subtitle={subtitle} />
-                <Action
-                    pickActionHandler={this.pickActionHandler}
-                    hasOptions={this.state.options.length > 0}
-                />
-                <Options
-                    options={this.state.options}
-                    removeOptionsHandler={this.removeOptionsHandler}
-                    removeOptionHandler={this.removeOptionHandler}
-                />
-                <AddOption
-                    addOptionHandler={this.addOptionHandler}
-                />
-                <OptionModal
-                    selectedOption={this.state.selectedOption}
-                    actionCloseHandler={this.actionCloseHandler}
-                />
+                <div className="container">
+                    <Action
+                        pickActionHandler={this.pickActionHandler}
+                        hasOptions={this.state.options.length > 0}
+                    />
+                    <Options
+                        options={this.state.options}
+                        removeOptionsHandler={this.removeOptionsHandler}
+                        removeOptionHandler={this.removeOptionHandler}
+                    />
+                    <AddOption
+                        addOptionHandler={this.addOptionHandler}
+                    />
+                    <OptionModal
+                        selectedOption={this.state.selectedOption}
+                        actionCloseHandler={this.actionCloseHandler}
+                    />
+                </div>
             </div>
+
         )
     }
 }
