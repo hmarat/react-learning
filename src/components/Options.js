@@ -19,6 +19,7 @@ const Options = props => (
                     key={index}
                     optionText={option}
                     removeOptionHandler={props.removeOptionHandler}
+                    count={index + 1}
                 />
             )
         )}
