@@ -1,0 +1,17 @@
+.edit-option{
+    flex-grow: 1;
+    margin-right: $s-size;
+}
+
+.edit-option-input{
+    background: $dark-blue;
+    border: none;
+    border-bottom: .3rem solid darken($dark-blue, 10%);
+    box-sizing: border-box;
+    padding: $s-size;
+    width: 100%;
+}
+
+.break{
+    flex-basis: 100%;
+}

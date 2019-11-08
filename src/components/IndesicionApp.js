@@ -8,7 +8,9 @@ import OptionModal from "./OptionModal"
 export default class IndesicionApp extends React.Component {
     state = {
         options: [],
-        selectedOption: undefined
+        selectedOption: undefined,
+        editingOption: null,
+        editOptionError: null
     }
 
     componentDidMount() {
@@ -61,6 +63,29 @@ export default class IndesicionApp extends React.Component {
         }))
     }
 
+    editOptionHandler = option => { this.setState(() => ({ editingOption: option, editOptionError: null })) }
+
+    editOptionSubmitHandler = (e) => {
+        e.preventDefault();
+
+        const optionEditedText = e.target.elements["editingOptionText"].value;
+        const optionPrevText = this.state.editingOption;
+
+        if (optionEditedText.length === 0) {
+            this.setState(() => ({ editOptionError: "Enter a valid option" }))
+        }
+        else if (this.state.options.indexOf(optionEditedText) === -1 || this.state.options.indexOf(optionEditedText) === this.state.options.indexOf(optionPrevText)) {
+            this.setState(prevState => ({
+                options: prevState.options.map(option => option !== optionPrevText ? option : optionEditedText),
+                editingOption: null,
+                editOptionError: null
+            }))
+        }
+        else {
+            this.setState(() => ({ editOptionError: "Option already exists" }))
+        }
+    }
+
     render() {
         const title = "Indesicion App";
         const subtitle = "Put your life in the hands of computer";
@@ -78,6 +103,10 @@ export default class IndesicionApp extends React.Component {
                             options={this.state.options}
                             removeOptionsHandler={this.removeOptionsHandler}
                             removeOptionHandler={this.removeOptionHandler}
+                            editingOption={this.state.editingOption}
+                            editOptionHandler={this.editOptionHandler}
+                            editOptionSubmitHandler={this.editOptionSubmitHandler}
+                            editOptionError={this.state.editOptionError}
                         />
                         <AddOption
                             addOptionHandler={this.addOptionHandler}

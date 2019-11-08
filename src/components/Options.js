@@ -20,6 +20,10 @@ const Options = props => (
                     optionText={option}
                     removeOptionHandler={props.removeOptionHandler}
                     count={index + 1}
+                    isEditing={props.editingOption === option}
+                    editOptionHandler={props.editOptionHandler}
+                    editOptionSubmitHandler={props.editOptionSubmitHandler}
+                    editOptionError={props.editingOption === option ? props.editOptionError : null}
                 />
             )
         )}
