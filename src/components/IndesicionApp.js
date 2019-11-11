@@ -8,7 +8,9 @@ import OptionModal from "./OptionModal"
 export default class IndesicionApp extends React.Component {
     state = {
         options: [],
+        checkedOptions: [],
         selectedOption: undefined,
+        editingText: "",
         editingOption: null,
         editOptionError: null
     }
@@ -25,9 +27,10 @@ export default class IndesicionApp extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if (prevState.options.length !== this.state.options.length) {
+        if (prevState.options.equals(this.state.options) !== true) {
             const json = JSON.stringify(this.state.options);
             localStorage.setItem("options", json);
+            console.log("Added to local storage");
         }
     }
 
@@ -63,12 +66,28 @@ export default class IndesicionApp extends React.Component {
         }))
     }
 
-    editOptionHandler = option => { this.setState(() => ({ editingOption: option, editOptionError: null })) }
+    editOptionHandler = option => {
+        if(!this.state.editOptionError){
+            this.setState(() => ({ editingOption: option, editOptionError: null, editingText: option })) 
+        }
+    }
 
-    editOptionSubmitHandler = (e) => {
-        e.preventDefault();
+    onEditOptinoBlur = (e) => {
+        e.stopPropagation();
+        
+        const editingText = this.state.editingText;
+        
+        this.editOptionValidateAndUpdate(editingText)
+    }
 
-        const optionEditedText = e.target.elements["editingOptionText"].value;
+    onEditOptionChangeHandler = (e) => {
+        const editingText = e.target.value;
+        if(this.state.editingText.trim() !== editingText){
+            this.setState(() => ({editingText}))
+        }
+    }
+
+    editOptionValidateAndUpdate = (optionEditedText) => {
         const optionPrevText = this.state.editingOption;
 
         if (optionEditedText.length === 0) {
@@ -86,7 +105,23 @@ export default class IndesicionApp extends React.Component {
         }
     }
 
-    render() {
+    editOptionSubmitHandler = (e) => {
+        e.preventDefault();
+
+        const optionEditedText = e.target.elements["editingOptionText"].value;
+        this.editOptionValidateAndUpdate(optionEditedText);   
+    }
+
+    onCheckHandler = (option, checked) =>{
+        if(checked){
+            this.setState((prevState) => ({checkedOptions: [...prevState.checkedOptions, option]}))
+        }
+        else{
+            this.setState((prevState) => ({checkedOptions: prevState.checkedOptions.filter(item => item !== option)}))
+        }
+    }
+
+    render() {console.log(this.state.checkedOptions)
         const title = "Indesicion App";
         const subtitle = "Put your life in the hands of computer";
 
@@ -107,6 +142,9 @@ export default class IndesicionApp extends React.Component {
                             editOptionHandler={this.editOptionHandler}
                             editOptionSubmitHandler={this.editOptionSubmitHandler}
                             editOptionError={this.state.editOptionError}
+                            onEditOptionBlur={this.onEditOptinoBlur}
+                            onEditOptionChangeHandler={this.onEditOptionChangeHandler}
+                            onCheckHandler={this.onCheckHandler}
                         />
                         <AddOption
                             addOptionHandler={this.addOptionHandler}

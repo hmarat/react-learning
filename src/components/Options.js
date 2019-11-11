@@ -24,6 +24,9 @@ const Options = props => (
                     editOptionHandler={props.editOptionHandler}
                     editOptionSubmitHandler={props.editOptionSubmitHandler}
                     editOptionError={props.editingOption === option ? props.editOptionError : null}
+                    onEditOptionBlur={props.onEditOptionBlur}
+                    onEditOptionChangeHandler={props.onEditOptionChangeHandler}
+                    onCheckHandler={props.onCheckHandler}
                 />
             )
         )}
