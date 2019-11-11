@@ -32,6 +32,10 @@
     padding: 0;
 }
 
+.checked{
+    margin-right: $s-size;
+}
+
 @media(min-width: $desktop-breakpoint){
     .big-button{
         margin-bottom: $xl-size;

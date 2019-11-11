@@ -7,12 +7,14 @@ const Option = props => (
             ?
             <p className="option__text" onClick={() => props.editOptionHandler(props.optionText)}>{`${props.count}. ${props.optionText}`}</p>
             :
-            <EditOption 
-                optionText={props.optionText} 
+            <EditOption
+                optionText={props.optionText}
                 editOptionSubmitHandler={props.editOptionSubmitHandler}
                 onChange={props.onEditOptionChangeHandler}
                 onBlur={props.onEditOptionBlur}
             />
+        }{
+            //console.log(props)
         }
         <div>
             <button
@@ -21,7 +23,7 @@ const Option = props => (
             >
                 Remove
             </button>
-            <input type="checkbox" className="checkbox" onChange={(e) => props.onCheckHandler(props.optionText, e.target.checked)} />
+            <input type="checkbox" className="checkbox" checked={props.checked} onChange={(e) => props.onCheckHandler(props.optionText, e.target.checked)} />
         </div>
         {props.editOptionError && <p className="add-option-error break">{props.editOptionError}</p>}
     </div>

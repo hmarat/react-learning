@@ -54,36 +54,46 @@ export default class IndesicionApp extends React.Component {
     }
 
     addOptionHandler = (option) => {
-        if (!option) {
+        if (!option.trim()) {
             return "Enter a valid option"
         }
-        else if (this.state.options.indexOf(option) > -1) {
+        else if (this.state.options.indexOf(option.trim()) > -1) {
             return "Option already exists"
         }
 
         this.setState(prevState => ({
-            options: [...prevState.options, option]
+            options: [...prevState.options, option.trim()]
         }))
     }
 
     editOptionHandler = option => {
-        if(!this.state.editOptionError){
-            this.setState(() => ({ editingOption: option, editOptionError: null, editingText: option })) 
+        if (!this.state.editOptionError) {
+            this.setState(() => ({ editingOption: option, editOptionError: null, editingText: option }))
         }
     }
 
     onEditOptinoBlur = (e) => {
         e.stopPropagation();
-        
+
         const editingText = this.state.editingText;
-        
+
         this.editOptionValidateAndUpdate(editingText)
     }
 
     onEditOptionChangeHandler = (e) => {
-        const editingText = e.target.value;
-        if(this.state.editingText.trim() !== editingText){
-            this.setState(() => ({editingText}))
+        const editingText = e.target.value.trim();
+        const prevEditingText = this.state.editingText;
+
+        if (prevEditingText !== editingText) {
+            if (this.state.checkedOptions.indexOf(prevEditingText) !== -1) {
+                this.setState(() => ({
+                    editingText,
+                    checkedOptions: this.state.checkedOptions.map(option => option === prevEditingText ? editingText : option)
+                }))
+            }
+            else {
+                this.setState(() => ({ editingText }))
+            }
         }
     }
 
@@ -97,7 +107,8 @@ export default class IndesicionApp extends React.Component {
             this.setState(prevState => ({
                 options: prevState.options.map(option => option !== optionPrevText ? option : optionEditedText),
                 editingOption: null,
-                editOptionError: null
+                editOptionError: null,
+                editingText: ""
             }))
         }
         else {
@@ -109,19 +120,29 @@ export default class IndesicionApp extends React.Component {
         e.preventDefault();
 
         const optionEditedText = e.target.elements["editingOptionText"].value;
-        this.editOptionValidateAndUpdate(optionEditedText);   
+        this.editOptionValidateAndUpdate(optionEditedText);
     }
 
-    onCheckHandler = (option, checked) =>{
-        if(checked){
-            this.setState((prevState) => ({checkedOptions: [...prevState.checkedOptions, option]}))
+    onCheckHandler = (option, checked) => {
+        if (checked) {
+            this.setState((prevState) => ({ checkedOptions: [...prevState.checkedOptions, option] }))
         }
-        else{
-            this.setState((prevState) => ({checkedOptions: prevState.checkedOptions.filter(item => item !== option)}))
+        else {
+            this.setState((prevState) => ({ checkedOptions: prevState.checkedOptions.filter(item => item !== option) }))
         }
     }
 
-    render() {console.log(this.state.checkedOptions)
+    removeCheckedOptionsHandler = () => {
+        this.setState((prevState) => ({
+            options: prevState.options.filter(option => prevState.checkedOptions.indexOf(option) === -1),
+            checkedOptions: []
+        }))
+    }
+
+    render() {
+        // console.log(`checked options: ${this.state.checkedOptions}`)
+        // console.log(`editing text: ${this.state.editingText}`)
+        console.log(this.state.options)
         const title = "Indesicion App";
         const subtitle = "Put your life in the hands of computer";
 
@@ -145,6 +166,8 @@ export default class IndesicionApp extends React.Component {
                             onEditOptionBlur={this.onEditOptinoBlur}
                             onEditOptionChangeHandler={this.onEditOptionChangeHandler}
                             onCheckHandler={this.onCheckHandler}
+                            checkedOptions={this.state.checkedOptions}
+                            removeCheckedOptionsHandler={this.removeCheckedOptionsHandler}
                         />
                         <AddOption
                             addOptionHandler={this.addOptionHandler}
