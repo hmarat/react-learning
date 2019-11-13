@@ -45,7 +45,12 @@ export default class IndesicionApp extends React.Component {
 
     removeOptionsHandler = () => {
         this.setState(() => ({
-            options: []
+            options: [],
+            checkedOptions: [],
+            selectedOption: undefined,
+            editingText: "",
+            editingOption: null,
+            editOptionError: null
         }))
     }
 
